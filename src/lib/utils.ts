@@ -6,9 +6,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function anonymizeName(name: string) {
-  if (!name) return "";
-  if (name.length <= 2) return name[0] + "*";
-  return name[0] + "*".repeat(name.length - 2) + name[name.length - 1];
+  if (!name) return "Anonim";
+  return "******";
 }
 
 export function formatCurrency(amount: number | string) {

@@ -1,4 +1,4 @@
-Berikut PRD (Product Requirements Document) yang telah diperbarui untuk **Auct-Simply**. Fokus pada kemudahan penggunaan, performa tinggi, dan integrasi modern menggunakan Prisma serta Supabase.
+Berikut PRD (Product Requirements Document) yang telah diperbarui untuk **Auct-Simply** agar sesuai dengan kondisi aplikasi saat ini. Fokus pada kemudahan penggunaan, performa tinggi, dan integrasi modern menggunakan Prisma, Better Auth, serta Supabase.
 
 ---
 
@@ -6,122 +6,120 @@ Berikut PRD (Product Requirements Document) yang telah diperbarui untuk **Auct-S
 
 ## 1. **Executive Summary**
 
-Auct-Simply adalah platform jual ringan yang dirancang untuk konversi tinggi dengan menghilangkan hambatan login bagi penawar. Fokus utama adalah kecepatan, privasi penawar, dan kemudahan pengelolaan bagi admin.
+Auct-Simply adalah platform lelang ringan yang dirancang untuk konversi tinggi dengan menghilangkan hambatan login bagi penawar. Fokus utama adalah kecepatan, privasi penawar, dan kemudahan pengelolaan bagi admin.
 
-*   **Zero Friction**: Penawar tidak perlu membuat akun.
-*   **Privacy First**: Identitas penawar dianonimkan di ruang publik.
-*   **Admin Power**: Dashboard lengkap untuk mengelola barang dan memantau penawar asli.
-*   **Modern Stack**: Next.js, Prisma ORM, dan Supabase Storage.
+*   **Zero Friction**: Penawar tidak perlu membuat akun untuk melakukan bid.
+*   **Privacy First**: Identitas penawar dianonimkan di ruang publik (inisial).
+*   **Admin Power**: Dashboard lengkap untuk mengelola barang dan memantau data penawar asli.
+*   **Modern Stack**: Next.js 16, React 19, Prisma ORM, Better Auth, dan Supabase Storage.
 
 ---
 
 ## 2. **User Persona**
 
 ### 2.1 Admin (Penjual)
-*   Mengelola inventaris barang jual.
-*   Mengunggah foto produk berkualitas tinggi.
-*   Melihat detail penawar (Nama & WhatsApp) untuk proses *closing*.
+*   Mengelola inventaris barang lelang (Create, Read, Update, Delete).
+*   Mengunggah foto produk melalui integrasi S3/Supabase.
+*   Memantau statistik penjualan dan detail penawar untuk proses *closing*.
 
 ### 2.2 User (Penawar)
-*   Melihat daftar barang yang tersedia.
-*   Melakukan penawaran (*bidding*) secara instan.
-*   Identitas publik disamarkan (misal: `J***` untuk `Joko`).
+*   Menjelajah daftar barang dalam tampilan grid yang responsif.
+*   Melakukan penawaran (*bidding*) secara instan tanpa login.
+*   Data identitas disimpan di `localStorage` untuk kemudahan penawaran berikutnya.
 
 ---
 
 ## 3. **Fitur Utama**
 
 ### 3.1 Public Interface (Bidding Experience)
-*   **Modern Homepage**: Grid layout yang menampilkan barang dengan gambar berkualitas tinggi dari Supabase.
-*   **Live Countdown & Stats**: Menampilkan harga tertinggi saat ini dan jumlah penawar.
-*   **Instant Bid Form**: Input Nama, WhatsApp, dan Harga. Data Nama & WhatsApp disimpan di `localStorage` untuk kemudahan di penawaran berikutnya.
-*   **Anonymization Logic**: Menampilkan inisial depan (contoh: `Budi` -> `B***`).
+*   **Responsive Homepage**: Grid layout menampilkan barang dengan desain kartu premium (Image on left, Info on right pada mobile/desktop).
+*   **Optimized Images**: Menggunakan `next/image` dengan properti `sizes` yang tepat untuk performa maksimal.
+*   **Instant Bid Form**: Validasi ketat menggunakan Zod untuk Nama, WhatsApp, dan Harga.
+*   **Anonymization Logic**: Menampilkan inisial (contoh: `J***` untuk `Joko`) pada daftar penawaran publik.
 
 ### 3.2 Admin Dashboard (Management)
-*   **Secure Authentication**: Menggunakan **Better Auth** untuk proteksi akses admin.
+*   **Secure Authentication**: Menggunakan **Better Auth** dengan proteksi rute di `proxy.ts`.
 *   **Item Management**: 
-    *   Formulir pembuatan barang dengan integrasi **Supabase Storage** untuk unggah gambar.
-    *   Edit dan hapus barang jual.
-*   **Real-time Bid Tracking**: List penawaran masuk dengan data lengkap (Nama Asli & WhatsApp) untuk kebutuhan verifikasi dan transaksi.
+    *   Formulir canggih dengan `react-hook-form` dan `zod`.
+    *   Integrasi **Supabase Storage** melalui Server Actions untuk unggah gambar.
+*   **Real-time Stats**: Dashboard dengan ringkasan Total Barang, Total Penawaran, Bid Tertinggi, dan Penawar Unik.
+*   **Feedback System**: Menggunakan **Sonner** untuk notifikasi aksi yang sukses atau gagal.
 
 ---
 
 ## 4. **Teknologi & Arsitektur**
 
 ### 4.1 Core Stack
-*   **Framework**: Next.js (App Router)
-*   **Language**: TypeScript
-*   **Styling**: Vanilla CSS / Tailwind CSS (Optional)
+*   **Framework**: Next.js 16.2 (App Router)
+*   **UI Library**: React 19.2
+*   **Styling**: Tailwind CSS v4 (Utility-first modern styling)
+*   **Icons**: Lucide React
+*   **Components**: Shadcn UI (Radix UI based)
 
 ### 4.2 Data & Storage
-*   **ORM**: **Prisma** (Modern, Type-safe database access)
-*   **Database**: PostgreSQL (Supabase / Neon)
-*   **Object Storage**: **Supabase Storage** (Untuk menyimpan foto barang jual)
+*   **ORM**: **Prisma 7.8** (Type-safe access)
+*   **Database**: PostgreSQL
+*   **State Management**: TanStack Query v5 (Server-state synchronization)
+*   **Object Storage**: Supabase Storage (S3-compatible)
 
-### 4.3 Auth
-*   **Library**: Better Auth
+### 4.3 Auth & Security
+*   **Library**: Better Auth 1.6
+*   **Security Pattern**: `proxy.ts` untuk manajemen redirect dan proteksi admin rute.
 
 ---
 
 ## 5. **Struktur Database (Prisma Schema)**
 
-### Model: `User` (Admin)
-*   `id`: String (UUID)
-*   `email`: String (Unique)
-*   `password`: String (Hashed)
-
-### Model: `Item` (Barang jual)
-*   `id`: String (UUID)
+### Model: `Item` (Barang lelang)
+*   `id`: String (CUID)
 *   `title`: String
-*   `description`: Text
-*   `basePrice`: Decimal (Optional)
-*   `imageUrl`: String (URL dari Supabase Storage)
-*   `imagePath`: String (Path file di Supabase untuk manajemen penghapusan)
-*   `createdAt`: DateTime
-*   `updatedAt`: DateTime
+*   `description`: String
+*   `basePrice`: Decimal (Mapped as `base_price`)
+*   `imageUrl`: String (URL dari Supabase)
+*   `imagePath`: String (Internal path untuk cleanup)
+*   `createdAt` & `updatedAt`: DateTime
 
 ### Model: `Bid` (Penawaran)
-*   `id`: String (UUID)
-*   `itemId`: String (Relation to Item)
+*   `id`: String (CUID)
+*   `itemId`: Relation to Item
 *   `name`: String
 *   `phone`: String
 *   `amount`: Decimal
 *   `createdAt`: DateTime
 
----
-
-## 6. **Flow Pengunggahan Gambar (Supabase)**
-
-1.  Admin memilih gambar di form "Create Item".
-2.  Client/Server mengirim file ke **Supabase Storage Bucket** (`auction-items`).
-3.  Supabase mengembalikan `publicUrl` atau path file.
-4.  Path/URL disimpan ke database PostgreSQL melalui **Prisma**.
-5.  Gambar ditampilkan di halaman publik menggunakan optimasi gambar Next.js.
+### Auth Models (Better Auth)
+*   `User`, `Session`, `Account`, `Verification`.
 
 ---
 
-## 7. **Saran Implementasi & Keamanan**
+## 6. **Flow Pengunggahan Gambar**
 
-### 1. Penanganan Spam
-*   Implementasi **Rate Limiting** pada endpoint `/api/bids`.
-*   Validasi nomor WhatsApp (format minimal).
-
-### 2. Integritas Data (Race Condition)
-*   Gunakan **Prisma Transaction** saat menyimpan penawaran baru.
-*   Pastikan `amount` yang dikirim lebih besar dari penawaran tertinggi terakhir di sisi server, bukan hanya di client.
-
-### 3. Performa Gambar
-*   Gunakan transformasi gambar Supabase (jika tersedia) atau Next.js `Image` component untuk *lazy loading* dan *resizing* otomatis.
+1.  Admin memilih gambar via `FileUpload01` component.
+2.  Client memanggil Server Action `uploadImage`.
+3.  Server mengunggah file ke Supabase Bucket menggunakan S3 SDK.
+4.  Database menyimpan `imageUrl` dan `imagePath`.
+5.  Komponen `Image` Next.js merender gambar dengan optimasi otomatis.
 
 ---
 
-## 8. **MVP Scope (Fase 1)**
+## 7. **Implementasi & Keamanan Terkini**
 
-*   [ ] Integrasi Prisma dengan PostgreSQL.
-*   [ ] Setup Supabase Storage Bucket untuk Gambar.
-*   [ ] Halaman Utama & Detail Barang (Public).
-*   [ ] Form Bidding dengan anonimitas.
-*   [ ] Admin Panel: Login, Tambah Barang (dengan Upload Gambar), & List Penawaran.
+1.  **Handling Decimal**: Konversi otomatis tipe `Decimal` Prisma ke `number` sebelum dikirim ke Client Component untuk mencegah error serialisasi.
+2.  **Mobile First**: Seluruh antarmuka telah diaudit dan dioptimasi untuk perangkat mobile.
+3.  **Accessibility**: Penggunaan komponen `Field`, `Label`, dan `FieldError` yang aksesibel untuk pembaca layar (Screen Reader).
+4.  **Route Protection**: Logika autentikasi terpusat di `proxy.ts` untuk menangani redirect login/dashboard secara efisien.
 
 ---
-**Kesimpulan**: Dengan menggunakan Prisma dan Supabase, Auct-Simply akan memiliki infrastruktur yang skalabel dan mudah dikelola, sambil tetap menjaga performa maksimal untuk user.
+
+## 8. **Status Milestone (Fase 1 - SELESAI)**
+
+*   [x] Integrasi Prisma dengan PostgreSQL.
+*   [x] Setup Supabase Storage Bucket & S3 SDK.
+*   [x] Migrasi ke Better Auth & Implementasi `proxy.ts`.
+*   [x] Halaman Utama & Detail Barang (Responsive Grid).
+*   [x] Form Bidding dengan anonimitas & LocalStorage.
+*   [x] Admin Panel: Dashboard Stats, CRUD Barang, & List Penawaran.
+*   [x] Optimasi Performa (Image Sizes, React Compiler).
+
+---
+**Kesimpulan**: Auct-Simply kini telah memiliki fondasi yang sangat kuat dan modern. Aplikasi siap untuk digunakan dengan performa tinggi dan pengalaman pengguna yang premium baik di sisi penawar maupun admin.
