@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AuctSimply — Platform Lelang Anonim Premium",
-  description: "Ikuti lelang barang eksklusif dengan aman dan anonim. Sistem penawaran transparan dengan privasi terjaga.",
-  keywords: ["lelang", "auction", "anonim", "premium", "barang mewah"],
+  title: "AuctSimply — Jual Barang Anonim Premium",
+  description: "Ikuti jual beli barang eksklusif dengan aman dan anonim. Sistem penawaran transparan dengan privasi terjaga.",
+  keywords: [ "auction", "anonim", "premium", "barang mewah"],
 };
 
 export default function RootLayout({

@@ -18,7 +18,7 @@ export default function ItemGrid() {
   if (!items || items.length === 0) {
     return (
       <div className="flex h-64 w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed">
-        <p className="text-xl font-medium text-muted-foreground">Belum ada barang lelang.</p>
+        <p className="text-xl font-medium text-muted-foreground">Belum ada barang dijual.</p>
         <p className="text-sm text-muted-foreground/60">Cek kembali nanti!</p>
       </div>
     );

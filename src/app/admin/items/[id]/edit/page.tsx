@@ -14,7 +14,7 @@ export default async function EditItemPage({ params }: { params: { id: string } 
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Edit Barang</h1>
-        <p className="text-muted-foreground">Perbarui informasi barang lelang.</p>
+        <p className="text-muted-foreground">Perbarui informasi barang jualan Anda.</p>
       </div>
 
       <ItemForm initialData={item} />

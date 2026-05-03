@@ -15,6 +15,7 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Loader2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import FileUpload01 from "@/components/file-upload-01";
 
 type ItemFormValues = z.infer<typeof itemSchema>;
 
@@ -47,10 +48,7 @@ export default function ItemForm({ initialData }: ItemFormProps) {
 
   const imageUrl = watch("imageUrl");
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const handleImageUpload = async (file: File) => {
     setIsUploading(true);
     const formData = new FormData();
     formData.append("file", file);
@@ -130,57 +128,17 @@ export default function ItemForm({ initialData }: ItemFormProps) {
         </div>
 
         {/* Right: Image Upload */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           <FieldLabel>Gambar Barang</FieldLabel>
-          <Card className="overflow-hidden">
-            <CardContent className="p-4">
-              {imageUrl ? (
-                <div className="relative aspect-square rounded-lg overflow-hidden border">
-                  <Image src={imageUrl} alt="Preview" fill className="object-cover" />
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon"
-                    className="absolute top-2 right-2 h-8 w-8"
-                    onClick={() => {
-                      setValue("imageUrl", "");
-                      setValue("imagePath", "");
-                    }}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ) : (
-                <label
-                  htmlFor="image-upload"
-                  className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors hover:bg-muted/50 relative"
-                >
-                  <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                    <Upload className="mb-4 h-8 w-8 text-muted-foreground" />
-                    <p className="mb-2 text-sm text-muted-foreground font-semibold">
-                      Klik untuk upload gambar
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      PNG, JPG, atau WebP
-                    </p>
-                  </div>
-                  <input
-                    id="image-upload"
-                    type="file"
-                    className="sr-only"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={isUploading}
-                  />
-                  {isUploading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-                      <Loader2 className="h-8 w-8 animate-spin" />
-                    </div>
-                  )}
-                </label>
-              )}
-            </CardContent>
-          </Card>
+          <FileUpload01
+            value={imageUrl}
+            onUpload={handleImageUpload}
+            onRemove={() => {
+              setValue("imageUrl", "");
+              setValue("imagePath", "");
+            }}
+            isUploading={isUploading}
+          />
         </div>
       </div>
 

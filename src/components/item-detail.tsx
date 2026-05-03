@@ -41,6 +41,7 @@ export default function ItemDetail({ id }: { id: string }) {
                 src={item.imageUrl}
                 alt={item.title}
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
                 priority
               />
@@ -55,7 +56,7 @@ export default function ItemDetail({ id }: { id: string }) {
         {/* Right: Info & Bid Form */}
         <div className="space-y-8">
           <div>
-            <h1 className="text-4xl font-black tracking-tight mb-2">{item.title}</h1>
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">{item.title}</h1>
             <div className="flex items-center text-sm text-muted-foreground">
               <Calendar className="mr-2 h-4 w-4" />
               Ditambahkan {new Date(item.createdAt).toLocaleDateString("id-ID", { 

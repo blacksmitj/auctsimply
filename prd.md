@@ -6,7 +6,7 @@ Berikut PRD (Product Requirements Document) yang telah diperbarui untuk **Auct-S
 
 ## 1. **Executive Summary**
 
-Auct-Simply adalah platform lelang ringan yang dirancang untuk konversi tinggi dengan menghilangkan hambatan login bagi penawar. Fokus utama adalah kecepatan, privasi penawar, dan kemudahan pengelolaan bagi admin.
+Auct-Simply adalah platform jual ringan yang dirancang untuk konversi tinggi dengan menghilangkan hambatan login bagi penawar. Fokus utama adalah kecepatan, privasi penawar, dan kemudahan pengelolaan bagi admin.
 
 *   **Zero Friction**: Penawar tidak perlu membuat akun.
 *   **Privacy First**: Identitas penawar dianonimkan di ruang publik.
@@ -18,7 +18,7 @@ Auct-Simply adalah platform lelang ringan yang dirancang untuk konversi tinggi d
 ## 2. **User Persona**
 
 ### 2.1 Admin (Penjual)
-*   Mengelola inventaris barang lelang.
+*   Mengelola inventaris barang jual.
 *   Mengunggah foto produk berkualitas tinggi.
 *   Melihat detail penawar (Nama & WhatsApp) untuk proses *closing*.
 
@@ -41,7 +41,7 @@ Auct-Simply adalah platform lelang ringan yang dirancang untuk konversi tinggi d
 *   **Secure Authentication**: Menggunakan **Better Auth** untuk proteksi akses admin.
 *   **Item Management**: 
     *   Formulir pembuatan barang dengan integrasi **Supabase Storage** untuk unggah gambar.
-    *   Edit dan hapus barang lelang.
+    *   Edit dan hapus barang jual.
 *   **Real-time Bid Tracking**: List penawaran masuk dengan data lengkap (Nama Asli & WhatsApp) untuk kebutuhan verifikasi dan transaksi.
 
 ---
@@ -56,7 +56,7 @@ Auct-Simply adalah platform lelang ringan yang dirancang untuk konversi tinggi d
 ### 4.2 Data & Storage
 *   **ORM**: **Prisma** (Modern, Type-safe database access)
 *   **Database**: PostgreSQL (Supabase / Neon)
-*   **Object Storage**: **Supabase Storage** (Untuk menyimpan foto barang lelang)
+*   **Object Storage**: **Supabase Storage** (Untuk menyimpan foto barang jual)
 
 ### 4.3 Auth
 *   **Library**: Better Auth
@@ -70,7 +70,7 @@ Auct-Simply adalah platform lelang ringan yang dirancang untuk konversi tinggi d
 *   `email`: String (Unique)
 *   `password`: String (Hashed)
 
-### Model: `Item` (Barang Lelang)
+### Model: `Item` (Barang jual)
 *   `id`: String (UUID)
 *   `title`: String
 *   `description`: Text
