@@ -28,7 +28,7 @@ export async function submitBid(data: z.infer<typeof bidSchema>) {
 
       // Validasi status barang
       if (item.status === "CLOSED") {
-        throw new Error("Lelang sudah ditutup");
+        throw new Error("Penawaran sudah ditutup");
       }
 
       // Validasi waktu (jika ada endDate)
@@ -38,7 +38,7 @@ export async function submitBid(data: z.infer<typeof bidSchema>) {
           where: { id: item.id },
           data: { status: "CLOSED", winnerId: item.bids[0]?.id || null }
         });
-        throw new Error("Lelang sudah berakhir");
+        throw new Error("Penawaran sudah berakhir");
       }
 
       const currentHighest = item.bids[0]?.amount ? Number(item.bids[0].amount) : Number(item.basePrice);

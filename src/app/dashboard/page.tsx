@@ -13,7 +13,7 @@ export default function Page() {
     { 
       name: "Total Penawaran Saya", 
       value: "12", 
-      description: "Lelang yang sedang diikuti", 
+      description: "Penawaran yang sedang diikuti", 
       trend: "up", 
       trendValue: "+2", 
       icon: Gavel 
@@ -21,7 +21,7 @@ export default function Page() {
     { 
       name: "Barang Dimenangkan", 
       value: "3", 
-      description: "Lelang yang berhasil dimenangkan", 
+      description: "Penawaran yang berhasil dimenangkan", 
       trend: "up", 
       trendValue: "+1", 
       icon: Package 
@@ -29,13 +29,13 @@ export default function Page() {
     { 
       name: "Penawaran Tertinggi", 
       value: "Rp 1.500.000", 
-      description: "Bid tertinggi Anda saat ini", 
+      description: "Penawaran tertinggi Anda saat ini", 
       trend: "up", 
       trendValue: "+5%", 
       icon: TrendingUp 
     },
     { 
-      name: "Lelang Dipantau", 
+      name: "Penawaran Dipantau", 
       value: "45", 
       description: "Barang dalam wishlist Anda", 
       icon: Users 

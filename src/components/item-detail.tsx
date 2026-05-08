@@ -50,7 +50,7 @@ export default function ItemDetail({ id }: { id: string }) {
             {isClosed && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                 <div className="rounded-2xl bg-white p-6 text-center shadow-2xl">
-                  <div className="mb-2 text-xs font-black uppercase tracking-widest text-muted-foreground">Lelang Selesai</div>
+                  <div className="mb-2 text-xs font-black uppercase tracking-widest text-muted-foreground">Penawaran Selesai</div>
                   <div className="text-2xl font-black text-primary">TERJUAL</div>
                 </div>
               </div>
@@ -111,7 +111,7 @@ export default function ItemDetail({ id }: { id: string }) {
 
           <div className={`rounded-2xl p-6 transition-colors ${isClosed ? "bg-primary/5 border border-primary/20" : "bg-muted/50"}`}>
             <div className="mb-1 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-              {isClosed ? "Harga Akhir" : "Bid Tertinggi Saat Ini"}
+              {isClosed ? "Harga Akhir" : "Penawaran Tertinggi Saat Ini"}
             </div>
             <div className="text-4xl font-black text-primary">
               {formatCurrency(Number(highestBid))}

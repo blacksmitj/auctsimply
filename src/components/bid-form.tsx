@@ -108,7 +108,7 @@ export default function BidForm({ itemId, currentHighest, disabled }: BidFormPro
                     id="amount"
                     type="text"
                     className="pl-10 font-medium"
-                    placeholder={disabled ? "Lelang Selesai" : `Contoh: ${formatNumber(minBid)}`}
+                    placeholder={disabled ? "Penawaran Selesai" : `Contoh: ${formatNumber(minBid)}`}
                     value={formatNumber(value)}
                     disabled={disabled}
                     onChange={(e) => {
@@ -134,9 +134,9 @@ export default function BidForm({ itemId, currentHighest, disabled }: BidFormPro
                 Mengirim...
               </>
             ) : disabled ? (
-              "Lelang Sudah Selesai"
+              "Penawaran Sudah Selesai"
             ) : (
-              "Kirim Bid Sekarang"
+              "Kirim Penawaran Sekarang"
             )}
           </Button>
           <p className="text-center text-[10px] text-muted-foreground">

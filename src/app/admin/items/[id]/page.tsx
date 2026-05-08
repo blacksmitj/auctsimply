@@ -75,15 +75,15 @@ export default async function AdminItemDetailPage({ params }: { params: { id: st
                 !isClosed ? "bg-green-500 hover:bg-green-600" : ""
               }`}
             >
-              {isClosed ? "Lelang Selesai" : "Sedang Berlangsung"}
+              {isClosed ? "Penawaran Selesai" : "Sedang Berlangsung"}
             </Badge>
           </div>
           <p className="text-muted-foreground max-w-2xl text-lg leading-relaxed">{item.description}</p>
         </div>
         
-        <div className="bg-primary/10 border border-primary/20 p-6 rounded-[2rem] text-right min-w-[240px]">
+        <div className="bg-primary/10 border border-primary/20 p-6 rounded-4xl text-right min-w-[240px]">
           <div className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70 mb-1">
-            {isClosed ? "Pemenang Akhir" : "Bid Tertinggi"}
+            {isClosed ? "Pemenang Akhir" : "Penawaran Tertinggi"}
           </div>
           <div className="text-4xl font-black text-primary">
             {highestBid ? formatCurrency(Number(highestBid.amount)) : formatCurrency(Number(item.basePrice || 0))}
@@ -99,7 +99,7 @@ export default async function AdminItemDetailPage({ params }: { params: { id: st
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Images & Status */}
         <div className="lg:col-span-1 space-y-6">
-          <Card className="overflow-hidden border-none bg-muted/30 rounded-[2rem] shadow-sm">
+          <Card className="overflow-hidden border-none bg-muted/30 rounded-4xl shadow-sm">
              <div className="relative aspect-4/5">
                 {item.images.length > 0 ? (
                   <Image 
@@ -126,7 +126,7 @@ export default async function AdminItemDetailPage({ params }: { params: { id: st
              )}
           </Card>
 
-          <Card className="rounded-[2rem] border-none shadow-sm">
+          <Card className="rounded-4xl border-none shadow-sm">
             <CardHeader>
               <CardTitle className="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                 <Clock className="h-4 w-4" /> Detail Waktu
@@ -161,7 +161,7 @@ export default async function AdminItemDetailPage({ params }: { params: { id: st
 
         {/* Right Column: Bidder Directory */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="rounded-[2rem] border-none shadow-sm overflow-hidden">
+          <Card className="rounded-4xl border-none shadow-sm overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between bg-muted/20 pb-6">
               <div className="space-y-1">
                 <CardTitle className="text-2xl font-black">Daftar Penawar</CardTitle>
@@ -173,7 +173,7 @@ export default async function AdminItemDetailPage({ params }: { params: { id: st
                 <TableHeader className="bg-muted/10">
                   <TableRow>
                     <TableHead className="pl-6 font-black uppercase text-[10px] tracking-widest">Penawar</TableHead>
-                    <TableHead className="font-black uppercase text-[10px] tracking-widest">Jumlah Bid</TableHead>
+                    <TableHead className="font-black uppercase text-[10px] tracking-widest">Jumlah Penawaran</TableHead>
                     <TableHead className="font-black uppercase text-[10px] tracking-widest">Waktu</TableHead>
                     <TableHead className="pr-6 text-right font-black uppercase text-[10px] tracking-widest">Aksi</TableHead>
                   </TableRow>

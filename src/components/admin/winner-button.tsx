@@ -74,8 +74,8 @@ export default function WinnerButton({ itemId, bidId, isWinner }: WinnerButtonPr
           <AlertDialogTitle>{isWinner ? "Batalkan Pemenang?" : "Jadikan Pemenang?"}</AlertDialogTitle>
           <AlertDialogDescription>
             {isWinner 
-              ? "Tindakan ini akan membuka kembali lelang dan menghapus status pemenang dari penawar ini." 
-              : "Tindakan ini akan otomatis MENUTUP lelang dan menetapkan penawar ini sebagai pemenang tunggal."}
+              ? "Tindakan ini akan membuka kembali penawaran dan menghapus status pemenang dari penawar ini." 
+              : "Tindakan ini akan otomatis MENUTUP penawaran dan menetapkan penawar ini sebagai pemenang tunggal."}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

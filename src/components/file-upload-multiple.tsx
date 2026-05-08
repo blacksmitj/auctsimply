@@ -222,7 +222,7 @@ export default function FileUploadMultiple({
             </TooltipTrigger>
             <TooltipContent className="py-2 bg-background text-foreground border shadow-lg max-w-[200px]">
               <p className="text-[11px] text-muted-foreground leading-relaxed">
-                Unggah hingga 5 gambar. Pilih satu sebagai gambar utama yang akan muncul di daftar lelang.
+                Unggah hingga 5 gambar. Pilih satu sebagai gambar utama yang akan muncul di daftar penawaran.
               </p>
             </TooltipContent>
           </Tooltip>

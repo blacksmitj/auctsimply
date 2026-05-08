@@ -50,8 +50,8 @@ export default async function AdminItemsPage() {
               <TableHead>Nama Barang</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Base Price</TableHead>
-              <TableHead>Bid Tertinggi</TableHead>
-              <TableHead>Total Bid</TableHead>
+              <TableHead>Penawaran Tertinggi</TableHead>
+              <TableHead>Total Penawaran</TableHead>
               <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
