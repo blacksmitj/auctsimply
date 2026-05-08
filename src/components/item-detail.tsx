@@ -32,6 +32,7 @@ export default function ItemDetail({ id }: { id: string }) {
   if (!item) return null;
 
   const highestBid = item.bids?.[0]?.amount || item.basePrice;
+  const highestBidderPhone = item.bids?.[0]?.phone || null;
   const isClosed = item.status === "CLOSED";
   const winner = isClosed ? item.bids.find((b: any) => b.id === item.winnerId) : null;
 
@@ -127,7 +128,12 @@ export default function ItemDetail({ id }: { id: string }) {
             {item.description}
           </p>
 
-          <BidForm itemId={item.id} currentHighest={Number(highestBid)} disabled={isClosed} />
+          <BidForm 
+            itemId={item.id} 
+            currentHighest={Number(highestBid)} 
+            highestBidderPhone={highestBidderPhone}
+            disabled={isClosed} 
+          />
           
           <BidList bids={item.bids} />
         </div>

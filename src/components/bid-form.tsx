@@ -18,10 +18,11 @@ type BidFormValues = z.infer<typeof bidSchema>;
 interface BidFormProps {
   itemId: string;
   currentHighest: number;
+  highestBidderPhone?: string | null;
   disabled?: boolean;
 }
 
-export default function BidForm({ itemId, currentHighest, disabled }: BidFormProps) {
+export default function BidForm({ itemId, currentHighest, highestBidderPhone, disabled }: BidFormProps) {
   const { mutate: submit, isPending } = useSubmitBid();
 
   const form = useForm<BidFormValues>({
@@ -39,6 +40,7 @@ export default function BidForm({ itemId, currentHighest, disabled }: BidFormPro
     handleSubmit,
     setValue,
     control,
+    watch,
     formState: { errors },
   } = form;
 
@@ -63,6 +65,8 @@ export default function BidForm({ itemId, currentHighest, disabled }: BidFormPro
   };
 
   const minBid = currentHighest + 10000; // Increment minimal 10000 based on server action logic
+  const phone = watch("phone");
+  const isHighestBidder = !!highestBidderPhone && phone === highestBidderPhone;
 
   return (
     <Card className="border-primary/20 bg-primary/5">
@@ -70,6 +74,14 @@ export default function BidForm({ itemId, currentHighest, disabled }: BidFormPro
         <CardTitle className="text-xl font-bold">Kirim Penawaran</CardTitle>
       </CardHeader>
       <CardContent>
+        {isHighestBidder && !disabled && (
+          <div className="rounded-xl bg-yellow-500/10 border border-yellow-500/20 p-3 mb-4 animate-in fade-in slide-in-from-top-1 duration-300">
+            <p className="text-[10px] font-black text-yellow-600 uppercase tracking-[0.1em] mb-1">Info Penawaran</p>
+            <p className="text-xs font-medium text-yellow-700/90 leading-relaxed">
+              Anda masih memimpin penawaran! Anda tidak bisa menawar lagi sampai ada orang lain yang melampaui harga Anda.
+            </p>
+          </div>
+        )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Field>
             <FieldLabel htmlFor="name">Nama Lengkap</FieldLabel>
@@ -127,7 +139,7 @@ export default function BidForm({ itemId, currentHighest, disabled }: BidFormPro
             <FieldError errors={[errors.amount]} />
           </Field>
 
-          <Button type="submit" className="w-full" disabled={isPending || disabled}>
+          <Button type="submit" className="w-full" disabled={isPending || disabled || isHighestBidder}>
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

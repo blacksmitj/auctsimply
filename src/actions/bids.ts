@@ -41,7 +41,13 @@ export async function submitBid(data: z.infer<typeof bidSchema>) {
         throw new Error("Penawaran sudah berakhir");
       }
 
-      const currentHighest = item.bids[0]?.amount ? Number(item.bids[0].amount) : Number(item.basePrice);
+      const currentHighestBid = item.bids[0];
+      const currentHighest = currentHighestBid?.amount ? Number(currentHighestBid.amount) : Number(item.basePrice);
+      
+      // Validasi: Tidak boleh menawar jika sudah menjadi yang tertinggi
+      if (currentHighestBid && currentHighestBid.phone === validated.phone) {
+        throw new Error("Anda masih memimpin penawaran! Tunggu penawar lain melampaui harga Anda sebelum menawar kembali.");
+      }
       
       // 2. Validasi kenaikan bid minimal
       const minRequired = currentHighest + MIN_INCREMENT;
