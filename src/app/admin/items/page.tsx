@@ -15,6 +15,7 @@ import { Edit, Trash2, Plus } from "lucide-react";
 export default async function AdminItemsPage() {
   const items = await prisma.item.findMany({
     include: {
+      images: true,
       _count: {
         select: { bids: true }
       },

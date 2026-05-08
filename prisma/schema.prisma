@@ -8,17 +8,30 @@ datasource db {
 }
 
 model Item {
-  id          String   @id @default(cuid())
+  id          String      @id @default(cuid())
   title       String
   description String
-  basePrice   Decimal? @map("base_price")
-  imageUrl    String?  @map("image_url")
-  imagePath   String?  @map("image_path")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  basePrice   Decimal?    @map("base_price")
+  imageUrl    String?     @map("image_url")
+  imagePath   String?     @map("image_path")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
   bids        Bid[]
+  images      ItemImage[]
 
   @@map("items")
+}
+
+model ItemImage {
+  id        String   @id @default(cuid())
+  itemId    String   @map("item_id")
+  url       String
+  path      String
+  isPrimary Boolean  @default(false) @map("is_primary")
+  createdAt DateTime @default(now()) @map("created_at")
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@map("item_images")
 }
 
 model Bid {

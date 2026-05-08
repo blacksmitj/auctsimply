@@ -8,9 +8,18 @@ import BidList from "@/components/bid-list";
 import { Loader2, Gavel, Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
 export default function ItemDetail({ id }: { id: string }) {
   const { data: item, isLoading } = useItem(id);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (item?.images?.length > 0) {
+      const primary = item.images.find((img: any) => img.isPrimary) || item.images[0];
+      setActiveImage(primary.url);
+    }
+  }, [item]);
 
   if (isLoading) {
     return (
@@ -36,9 +45,9 @@ export default function ItemDetail({ id }: { id: string }) {
         {/* Left: Image Gallery */}
         <div className="space-y-4">
           <div className="relative aspect-square overflow-hidden rounded-3xl bg-muted shadow-2xl">
-            {item.imageUrl ? (
+            {activeImage ? (
               <Image
-                src={item.imageUrl}
+                src={activeImage}
                 alt={item.title}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -51,6 +60,29 @@ export default function ItemDetail({ id }: { id: string }) {
               </div>
             )}
           </div>
+
+          {/* Thumbnails */}
+          {item.images?.length > 1 && (
+            <div className="flex gap-4 overflow-x-auto pb-2">
+              {item.images.map((img: any) => (
+                <button
+                  key={img.path}
+                  onClick={() => setActiveImage(img.url)}
+                  className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
+                    activeImage === img.url ? "border-primary scale-105" : "border-transparent opacity-60 hover:opacity-100"
+                  }`}
+                >
+                  <Image
+                    src={img.url}
+                    alt={item.title}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Right: Info & Bid Form */}

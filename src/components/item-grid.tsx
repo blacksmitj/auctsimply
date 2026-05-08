@@ -26,8 +26,12 @@ export default function ItemGrid() {
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {items.map((item: any) => (
-        <ItemCard key={item.id} item={item} />
+      {items.map((item: any, index: number) => (
+        <ItemCard 
+          key={item.id} 
+          item={item} 
+          priority={index < 4} 
+        />
       ))}
     </div>
   );

@@ -9,22 +9,24 @@ import { Gavel } from "lucide-react";
 
 interface ItemCardProps {
   item: any;
+  priority?: boolean;
 }
 
-export default function ItemCard({ item }: ItemCardProps) {
+export default function ItemCard({ item, priority }: ItemCardProps) {
   const highestBid = item.bids?.[0]?.amount || item.basePrice;
 
   return (
     <Link href={`/items/${item.id}`} className="block">
       <Card className="group flex flex-row overflow-hidden border-none bg-card/50 transition-all hover:shadow-2xl hover:shadow-primary/10">
         <div className="relative aspect-square w-24 shrink-0 overflow-hidden sm:w-32">
-          {item.imageUrl ? (
+          {item.images?.length > 0 ? (
             <Image
-              src={item.imageUrl}
+              src={item.images.find((img: any) => img.isPrimary)?.url || item.images[0].url}
               alt={item.title}
               fill
               sizes="(max-width: 640px) 100px, 150px"
               className="object-cover transition-transform duration-500 group-hover:scale-110"
+              priority={priority}
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-muted">

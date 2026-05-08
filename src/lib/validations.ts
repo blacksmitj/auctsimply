@@ -4,8 +4,11 @@ export const itemSchema = z.object({
   title: z.string().min(3, "Judul minimal 3 karakter"),
   description: z.string().min(5, "Deskripsi minimal 5 karakter"),
   basePrice: z.number().min(0, "Harga awal tidak boleh negatif"),
-  imageUrl: z.string().optional(),
-  imagePath: z.string().optional(),
+  images: z.array(z.object({
+    url: z.string(),
+    path: z.string(),
+    isPrimary: z.boolean(),
+  })).min(1, "Minimal upload 1 gambar"),
 });
 
 export const bidSchema = z.object({

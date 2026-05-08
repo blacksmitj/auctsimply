@@ -2,20 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createItem, updateItem, uploadImage } from "@/actions/items";
+import { createItem, updateItem } from "@/actions/items";
 import { itemSchema } from "@/lib/validations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { Loader2, Upload, X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { toast } from "sonner";
-import Image from "next/image";
-import FileUpload01 from "@/components/file-upload-01";
+import FileUploadMultiple from "@/components/file-upload-multiple";
 
 type ItemFormValues = z.infer<typeof itemSchema>;
 
@@ -24,7 +23,6 @@ interface ItemFormProps {
 }
 
 export default function ItemForm({ initialData }: ItemFormProps) {
-  const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
 
   const form = useForm<ItemFormValues>({
@@ -32,9 +30,12 @@ export default function ItemForm({ initialData }: ItemFormProps) {
     defaultValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",
-      basePrice: initialData?.basePrice || 0,
-      imageUrl: initialData?.imageUrl || "",
-      imagePath: initialData?.imagePath || "",
+      basePrice: Number(initialData?.basePrice) || 0,
+      images: initialData?.images?.map((img: any) => ({
+        url: img.url,
+        path: img.path,
+        isPrimary: !!img.isPrimary,
+      })) || [],
     },
   });
 
@@ -46,30 +47,9 @@ export default function ItemForm({ initialData }: ItemFormProps) {
     formState: { errors, isSubmitting },
   } = form;
 
-  const imageUrl = watch("imageUrl");
+  const images = watch("images");
 
-  const handleImageUpload = async (file: File) => {
-    setIsUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await uploadImage(formData);
-      if (res.success) {
-        setValue("imageUrl", res.url);
-        setValue("imagePath", res.path);
-        toast.success("Gambar berhasil diunggah");
-      } else {
-        toast.error(res.error || "Gagal mengunggah gambar");
-      }
-    } catch (err) {
-      toast.error("Terjadi kesalahan saat mengunggah");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const onSubmit = async (data: ItemFormValues) => {
+  const onSubmit: SubmitHandler<ItemFormValues> = async (data) => {
     try {
       let res;
       if (initialData?.id) {
@@ -130,15 +110,11 @@ export default function ItemForm({ initialData }: ItemFormProps) {
         {/* Right: Image Upload */}
         <div className="space-y-4">
           <FieldLabel>Gambar Barang</FieldLabel>
-          <FileUpload01
-            value={imageUrl}
-            onUpload={handleImageUpload}
-            onRemove={() => {
-              setValue("imageUrl", "");
-              setValue("imagePath", "");
-            }}
-            isUploading={isUploading}
+          <FileUploadMultiple
+            value={images}
+            onChange={(val) => setValue("images", val, { shouldValidate: true })}
           />
+          <FieldError errors={[errors.images]} />
         </div>
       </div>
 
@@ -151,7 +127,7 @@ export default function ItemForm({ initialData }: ItemFormProps) {
         >
           Batal
         </Button>
-        <Button type="submit" disabled={isSubmitting || isUploading}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
