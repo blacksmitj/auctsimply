@@ -38,18 +38,22 @@ export default function LoginPage() {
 
   const handleLogin = async (values: LoginValues) => {
     try {
+      console.log("Mencoba login untuk:", values.email);
       const { data, error } = await authClient.signIn.email({
         email: values.email,
         password: values.password,
       });
 
       if (error) {
+        console.error("Login Error (Better Auth):", error);
         toast.error(error.message || "Login gagal");
       } else {
+        console.log("Login Berhasil:", data);
         toast.success("Login berhasil!");
         router.push("/admin/dashboard");
       }
     } catch (err) {
+      console.error("Login Exception (Unexpected):", err);
       toast.error("Terjadi kesalahan saat login");
     }
   };
