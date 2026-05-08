@@ -1,7 +1,9 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import Sidebar from "@/components/admin/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
 export default async function AdminLayout({
   children,
@@ -12,23 +14,35 @@ export default async function AdminLayout({
     headers: await headers(),
   });
 
-  if (!session) {
-    // Cek apakah path saat ini adalah login, jika bukan redirect
-    // Tapi karena ini layout admin, jika di /admin/* dan bukan /admin/login, redirect
-    // Kita bisa cek dari path, tapi cara termudah adalah cek session
-    // Namun kita harus mengecualikan /admin/login agar tidak infinite redirect
-    // (Next.js layout logic: /admin/login akan menggunakan layout ini jika ada di folder /admin)
-    // Sebaiknya login diletakkan di luar /admin/layout atau di-handle di middleware
-  }
-
   return (
-    <div className="flex min-h-screen bg-muted/20">
-      <Sidebar />
-      <main className="flex-1 p-8 overflow-y-auto">
-        <div className="mx-auto max-w-6xl">
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbLink href="/admin/dashboard">
+                    Admin
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </header>
+        <main className="flex-1 overflow-y-auto p-4">
           {children}
-        </div>
-      </main>
-    </div>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
+
+

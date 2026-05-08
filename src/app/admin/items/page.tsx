@@ -9,8 +9,10 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
-import { Edit, Trash2, Plus } from "lucide-react";
+import { Edit, Eye, Plus } from "lucide-react";
+import DeleteButton from "@/components/admin/delete-button";
 
 export default async function AdminItemsPage() {
   const items = await prisma.item.findMany({
@@ -46,6 +48,7 @@ export default async function AdminItemsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Nama Barang</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Base Price</TableHead>
               <TableHead>Bid Tertinggi</TableHead>
               <TableHead>Total Bid</TableHead>
@@ -55,14 +58,23 @@ export default async function AdminItemsPage() {
           <TableBody>
             {items.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center">
+                <TableCell colSpan={6} className="h-24 text-center">
                   Belum ada barang.
                 </TableCell>
               </TableRow>
             ) : (
               items.map((item: any) => (
                 <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.title}</TableCell>
+                  <TableCell className="font-medium">
+                    <Link href={`/admin/items/${item.id}`} className="hover:underline text-primary font-bold">
+                      {item.title}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={item.status === "CLOSED" ? "secondary" : "default"}>
+                      {item.status === "CLOSED" ? "Selesai" : "Berlangsung"}
+                    </Badge>
+                  </TableCell>
                   <TableCell>{formatCurrency(Number(item.basePrice || 0))}</TableCell>
                   <TableCell className="text-primary font-bold">
                     {formatCurrency(Number(item.bids[0]?.amount || 0))}
@@ -71,14 +83,16 @@ export default async function AdminItemsPage() {
                   <TableCell className="text-right">
                     <div className="flex justify-end space-x-2">
                       <Button variant="ghost" size="icon" asChild>
+                        <Link href={`/admin/items/${item.id}`}>
+                          <Eye className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <Button variant="ghost" size="icon" asChild>
                         <Link href={`/admin/items/${item.id}/edit`}>
                           <Edit className="h-4 w-4" />
                         </Link>
                       </Button>
-                      {/* Delete logic will be added via client component later */}
-                      <Button variant="ghost" size="icon" className="text-destructive">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <DeleteButton itemId={item.id} />
                     </div>
                   </TableCell>
                 </TableRow>

@@ -17,3 +17,14 @@ export function formatCurrency(amount: number | string) {
     minimumFractionDigits: 0,
   }).format(Number(amount));
 }
+
+export function formatNumber(value: number | string | undefined | null) {
+  if (value === undefined || value === null || value === "") return "";
+  const num = Number(value);
+  if (isNaN(num)) return "";
+  return new Intl.NumberFormat("id-ID").format(num);
+}
+
+export function parseNumber(value: string) {
+  return Number(value.replace(/[^0-9]/g, ""));
+}

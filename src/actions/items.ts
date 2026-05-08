@@ -223,3 +223,61 @@ export async function uploadImage(formData: FormData) {
     return { success: false, error: error.message };
   }
 }
+export async function closeAuction(itemId: string) {
+  try {
+    const item = await prisma.item.findUnique({
+      where: { id: itemId },
+      include: {
+        bids: {
+          orderBy: { amount: "desc" },
+          take: 1,
+        },
+      },
+    });
+
+    if (!item) throw new Error("Barang tidak ditemukan");
+
+    const winnerId = item.bids[0]?.id || null;
+
+    await prisma.item.update({
+      where: { id: itemId },
+      data: {
+        status: "CLOSED",
+        winnerId: winnerId,
+      },
+    });
+
+    revalidatePath("/");
+    revalidatePath(`/items/${itemId}`);
+    revalidatePath("/admin/items");
+    revalidatePath(`/admin/items/${itemId}`);
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error closing auction:", error);
+    return { success: false, error: error.message };
+  }
+}
+export async function toggleWinner(itemId: string, bidId: string | null) {
+  try {
+    const status = bidId ? "CLOSED" : "OPEN";
+    
+    await prisma.item.update({
+      where: { id: itemId },
+      data: {
+        winnerId: bidId,
+        status: status,
+      },
+    });
+
+    revalidatePath("/");
+    revalidatePath(`/items/${itemId}`);
+    revalidatePath("/admin/items");
+    revalidatePath(`/admin/items/${itemId}`);
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error toggling winner:", error);
+    return { success: false, error: error.message };
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSubmitBid } from "@/hooks/use-bids";
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatNumber, parseNumber } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 type BidFormValues = z.infer<typeof bidSchema>;
@@ -18,9 +18,10 @@ type BidFormValues = z.infer<typeof bidSchema>;
 interface BidFormProps {
   itemId: string;
   currentHighest: number;
+  disabled?: boolean;
 }
 
-export default function BidForm({ itemId, currentHighest }: BidFormProps) {
+export default function BidForm({ itemId, currentHighest, disabled }: BidFormProps) {
   const { mutate: submit, isPending } = useSubmitBid();
 
   const form = useForm<BidFormValues>({
@@ -29,7 +30,7 @@ export default function BidForm({ itemId, currentHighest }: BidFormProps) {
       itemId,
       name: "",
       phone: "",
-      amount: 0,
+      amount: undefined as any,
     },
   });
 
@@ -37,6 +38,7 @@ export default function BidForm({ itemId, currentHighest }: BidFormProps) {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = form;
 
@@ -55,7 +57,7 @@ export default function BidForm({ itemId, currentHighest }: BidFormProps) {
 
     submit(data, {
       onSuccess: () => {
-        setValue("amount", 0);
+        setValue("amount", undefined as any);
       }
     });
   };
@@ -75,6 +77,7 @@ export default function BidForm({ itemId, currentHighest }: BidFormProps) {
               id="name"
               placeholder="Masukkan nama Anda"
               {...register("name")}
+              disabled={disabled}
             />
             <FieldError errors={[errors.name]} />
           </Field>
@@ -85,27 +88,53 @@ export default function BidForm({ itemId, currentHighest }: BidFormProps) {
               id="phone"
               placeholder="08123456789"
               {...register("phone")}
+              disabled={disabled}
             />
             <FieldError errors={[errors.phone]} />
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="amount">Jumlah Penawaran (IDR)</FieldLabel>
-            <Input
-              id="amount"
-              type="number"
-              placeholder={`Minimal ${formatCurrency(minBid)}`}
-              {...register("amount", { valueAsNumber: true })}
+            <FieldLabel htmlFor="amount">Jumlah Penawaran</FieldLabel>
+            <Controller
+              name="amount"
+              control={control}
+              render={({ field: { onChange, value, ...field } }) => (
+                <div className="relative group">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium text-sm transition-colors group-focus-within:text-primary">
+                    Rp
+                  </span>
+                  <Input
+                    {...field}
+                    id="amount"
+                    type="text"
+                    className="pl-10 font-medium"
+                    placeholder={disabled ? "Lelang Selesai" : `Contoh: ${formatNumber(minBid)}`}
+                    value={formatNumber(value)}
+                    disabled={disabled}
+                    onChange={(e) => {
+                      const rawValue = e.target.value;
+                      const numericValue = parseNumber(rawValue);
+                      if (rawValue === "") {
+                        onChange(undefined);
+                      } else if (!isNaN(numericValue)) {
+                        onChange(numericValue);
+                      }
+                    }}
+                  />
+                </div>
+              )}
             />
             <FieldError errors={[errors.amount]} />
           </Field>
 
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button type="submit" className="w-full" disabled={isPending || disabled}>
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Mengirim...
               </>
+            ) : disabled ? (
+              "Lelang Sudah Selesai"
             ) : (
               "Kirim Bid Sekarang"
             )}

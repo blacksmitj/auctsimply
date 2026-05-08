@@ -22,48 +22,10 @@ export default function Navbar() {
           <span className="text-xl font-bold tracking-tight">AuctSimply</span>
         </Link>
 
-        <nav className="hidden md:flex items-center space-x-4">
-          <Button variant="ghost" asChild>
-            <Link href="/">Jual</Link>
+        <div className="flex items-center">
+          <Button variant="default" className="rounded-full px-6 font-bold shadow-lg shadow-primary/20" asChild>
+            <Link href="/auth/login">Login Admin</Link>
           </Button>
-          <Button variant="outline" asChild>
-            <Link href="/admin">Panel Admin</Link>
-          </Button>
-        </nav>
-
-        <div className="md:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-              <SheetHeader>
-                <SheetTitle className="text-left">Menu Navigasi</SheetTitle>
-              </SheetHeader>
-              <div className="flex flex-col space-y-4 mt-8">
-                <Link 
-                  href="/" 
-                  className="text-lg font-semibold hover:text-primary transition-colors px-2 py-1"
-                >
-                  Jual
-                </Link>
-                <Link 
-                  href="/admin" 
-                  className="text-lg font-semibold hover:text-primary transition-colors px-2 py-1"
-                >
-                  Panel Admin
-                </Link>
-                <div className="pt-4">
-                  <Button className="w-full" asChild>
-                    <Link href="/admin">Kelola Barang</Link>
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
         </div>
       </div>
     </header>

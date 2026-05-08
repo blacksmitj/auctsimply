@@ -9,8 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { Loader2, Lock } from "lucide-react";
+import { Loader2, Lock, Home } from "lucide-react";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const loginSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -104,6 +105,14 @@ export default function LoginPage() {
               )}
             </Button>
           </form>
+
+          <div className="mt-6 border-t pt-4 text-center">
+            <Button variant="ghost" size="sm" className="text-muted-foreground" asChild>
+              <Link href="/">
+                <Home className="mr-2 h-4 w-4" /> Kembali ke Beranda
+              </Link>
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
